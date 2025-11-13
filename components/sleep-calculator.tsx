@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,28 @@ export default function SleepCalculator() {
   const [wakeUpTime, setWakeUpTime] = useState("");
   const [results, setResults] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState("when-to-sleep");
+
+  // Update document title when results change
+  useEffect(() => {
+    if (results.length > 0) {
+      const firstTime = results[0].replace("Power Nap: ", "").replace("Full Cycle: ", "");
+      
+      if (activeTab === "when-to-sleep") {
+        document.title = `😴 Go to sleep at ${firstTime} | Sleepy Calc`;
+      } else if (activeTab === "when-to-wake") {
+        document.title = `⏰ Wake up at ${firstTime} | Sleepy Calc`;
+      } else if (activeTab === "power-nap") {
+        document.title = `💤 ${results[0]} | Sleepy Calc`;
+      }
+    } else {
+      document.title = "Sleepy Calc - Sleep Calculator";
+    }
+
+    // Cleanup: reset title when component unmounts
+    return () => {
+      document.title = "Sleepy Calc - Sleep Calculator";
+    };
+  }, [results, activeTab]);
 
   const calculateBedtime = () => {
     if (!wakeUpTime) {

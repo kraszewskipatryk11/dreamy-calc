@@ -10,7 +10,7 @@ export default function Header() {
         <div className="flex items-center gap-3 sm:gap-6">
           <Link href="/" className="flex items-center gap-2 font-bold text-base sm:text-xl">
             <Moon className="h-5 w-5 sm:h-6 sm:w-6" />
-            <span>DreamyCalc</span>
+            <span>Sleepy Calc</span>
           </Link>
           <nav className="flex items-center gap-1 sm:gap-2">
             <Button variant="ghost" size="sm" className="text-xs sm:text-sm px-2 sm:px-4" asChild>
