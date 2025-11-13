@@ -161,18 +161,18 @@ export default function SleepCalculator() {
       </motion.div>
 
       <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="when-to-sleep" className="gap-2 cursor-pointer">
-            <Moon className="h-4 w-4" />
-            When to Sleep?
+        <TabsList className="grid w-full grid-cols-3 gap-1">
+          <TabsTrigger value="when-to-sleep" className="gap-1 cursor-pointer text-xs px-2">
+            <Moon className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="hidden xs:inline sm:inline">When to </span>Sleep?
           </TabsTrigger>
-          <TabsTrigger value="when-to-wake" className="gap-2 cursor-pointer">
-            <Clock className="h-4 w-4" />
-            When to Wake?
+          <TabsTrigger value="when-to-wake" className="gap-1 cursor-pointer text-xs px-2">
+            <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="hidden xs:inline sm:inline">When to </span>Wake?
           </TabsTrigger>
-          <TabsTrigger value="power-nap" className="gap-2 cursor-pointer">
-            <Zap className="h-4 w-4" />
-            Power Nap
+          <TabsTrigger value="power-nap" className="gap-1 cursor-pointer text-xs px-2">
+            <Zap className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="hidden xs:inline sm:inline">Power </span>Nap
           </TabsTrigger>
         </TabsList>
 

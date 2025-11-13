@@ -107,6 +107,42 @@ export default function TimePickerScroll({ value, onChange }: TimePickerScrollPr
     document.addEventListener("mouseup", handleMouseUp);
   };
 
+  const handleTouchDrag = (
+    e: React.TouchEvent<HTMLDivElement>,
+    setter: (val: number) => void,
+    current: number,
+    max: number,
+    min: number
+  ) => {
+    const startY = e.touches[0].clientY;
+    const startValue = current;
+
+    const handleTouchMove = (moveEvent: TouchEvent) => {
+      moveEvent.preventDefault();
+      const deltaY = startY - moveEvent.touches[0].clientY;
+      const sensitivity = 50;
+      const steps = Math.floor(deltaY / sensitivity);
+
+      if (steps !== 0) {
+        let newValue = startValue + steps;
+
+        // Handle wrapping
+        while (newValue > max) newValue = min + (newValue - max - 1);
+        while (newValue < min) newValue = max - (min - newValue - 1);
+
+        setter(newValue);
+      }
+    };
+
+    const handleTouchEnd = () => {
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.removeEventListener("touchend", handleTouchEnd);
+    };
+
+    document.addEventListener("touchmove", handleTouchMove, { passive: false });
+    document.addEventListener("touchend", handleTouchEnd);
+  };
+
   // Sync visual scroll position with state
   useEffect(() => {
     if (hoursRef.current) {
@@ -178,8 +214,9 @@ export default function TimePickerScroll({ value, onChange }: TimePickerScrollPr
           <div
             ref={hoursRef}
             onMouseDown={(e) => handleMouseDrag(e, setHours, hours, 12, 1)}
+            onTouchStart={(e) => handleTouchDrag(e, setHours, hours, 12, 1)}
             onWheel={(e) => handleWheel(e, setHours, hours, 12, 1)}
-            className="h-[168px] w-20 sm:w-24 overflow-hidden relative select-none cursor-ns-resize"
+            className="h-[168px] w-20 sm:w-24 overflow-hidden relative select-none cursor-ns-resize touch-none"
           >
             <div className="h-14" /> {/* Top padding */}
             {renderNumbers(12, hours - 1)}
@@ -196,8 +233,9 @@ export default function TimePickerScroll({ value, onChange }: TimePickerScrollPr
           <div
             ref={minutesRef}
             onMouseDown={(e) => handleMouseDrag(e, setMinutes, minutes, 59, 0)}
+            onTouchStart={(e) => handleTouchDrag(e, setMinutes, minutes, 59, 0)}
             onWheel={(e) => handleWheel(e, setMinutes, minutes, 59)}
-            className="h-[168px] w-20 sm:w-24 overflow-hidden relative select-none cursor-ns-resize"
+            className="h-[168px] w-20 sm:w-24 overflow-hidden relative select-none cursor-ns-resize touch-none"
           >
             <div className="h-14" /> {/* Top padding */}
             {renderNumbers(60, minutes)}
