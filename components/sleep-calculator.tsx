@@ -293,28 +293,46 @@ export default function SleepCalculator() {
                   {activeTab === "power-nap" && "Recommended Nap Times:"}
                 </motion.h2>
                 <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
-                  {results.map((time, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                      transition={{
-                        delay: 0.1 + index * 0.1,
-                        duration: 0.3,
-                        type: "spring",
-                        stiffness: 200
-                      }}
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <Badge
-                        variant="secondary"
-                        className="text-base sm:text-lg py-1.5 sm:py-2 px-3 sm:px-4 cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors"
+                  {results.map((time, index) => {
+                    // Recommended: first 2 options (best sleep cycles)
+                    const isRecommended = index < 2 && activeTab !== "power-nap";
+                    
+                    return (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        transition={{
+                          delay: 0.1 + index * 0.1,
+                          duration: 0.3,
+                          type: "spring",
+                          stiffness: 200
+                        }}
+                        whileHover={{ scale: 1.05, y: -2 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="relative"
                       >
-                        {time}
-                      </Badge>
-                    </motion.div>
-                  ))}
+                        {isRecommended && (
+                          <motion.span
+                            initial={{ opacity: 0, y: -5 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2 + index * 0.1 }}
+                            className="absolute -top-5 left-1/2 -translate-x-1/2 text-[10px] sm:text-xs font-semibold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent  whitespace-nowrap"
+                          >
+                            Recommended
+                          </motion.span>
+                        )}
+                        <Badge
+                          variant="secondary"
+                          className={`text-base sm:text-lg py-1.5 sm:py-2 px-3 sm:px-4 cursor-pointer hover:bg-primary hover:text-primary-foreground transition-colors ${
+                            isRecommended ? "ring-2 ring-purple-500/50" : ""
+                          }`}
+                        >
+                          {time}
+                        </Badge>
+                      </motion.div>
+                    );
+                  })}
                 </div>
                 <motion.p
                   initial={{ opacity: 0 }}
